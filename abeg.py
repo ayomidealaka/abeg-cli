@@ -1,4 +1,4 @@
-# from yaspin import yaspin
+from yaspin import yaspin
 import argparse
 import sys
 import platform
@@ -16,7 +16,6 @@ class Style:
     YELLOW = "\033[1;33m"
     GREEN = "\033[0;32m"
 
-# Attempt to get the API key from an environment variable
 api_key = os.getenv('OPENAI_API_KEY')
 
 if api_key is None:
@@ -64,8 +63,8 @@ def requestFromAI(question):
         response_content = response.choices[0].message.content
         lines = response_content.split('\n')
 
-        formatted_lines = [f"{Style.YELLOW}{lines[0]}{Style.RESET}"] + \
-                        [f"$ {line}" for line in lines[1:]]
+        formatted_lines = [f"{Style.YELLOW}{lines[0]}{Style.RESET}\n"] + \
+                        [f"{Style.GREEN}${Style.RESET} {line}" for line in lines[1:]]
 
         formatted_output = '\n'.join(formatted_lines)
         print(formatted_output)

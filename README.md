@@ -19,7 +19,9 @@ abeg command to stop all running services on port 3000
 'abeg-cli' will immediately respond with a command like:
 
 ```bash
-kill $(lsof -t -i:3000)
+Stopping all services running on port 3000.
+
+$ lsof -i :3000 | awk 'NR!=1 {print $2}' | xargs kill
 ```
 
 Run the returned command in your terminal, and your task is done!
