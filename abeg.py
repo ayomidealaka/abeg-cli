@@ -19,6 +19,7 @@ class Style:
     GREEN = "\033[0;32m"
 
 api_key = os.getenv('OPENAI_API_KEY')
+__version__ = "v0.0.1"
 
 if api_key is None:
     print(f"{Style.RED}Error:{Style.RESET} OpenAI API key not found. Please set the OPENAI_API_KEY environment variable using 'export OPENAI_API_KEY=your_openai_api_key'")
@@ -33,6 +34,9 @@ def print_custom_help():
  Usage: {Style.BOLD}abeg{Style.RESET} [command you need help with]
 """
     print(custom_help_text)
+
+def print_version():
+    print(__version__)
 
 def requestFromAI(question):
     architecture = platform.machine()
@@ -87,6 +91,8 @@ def requestFromAI(question):
 def main():
     if "-h" in sys.argv or "--help" in sys.argv:
         print_custom_help()
+    elif "-v" in sys.argv or "--version" in sys.argv:
+        print_version()
     else:
         command_description = ' '.join(sys.argv[1:])
         requestFromAI(command_description)
