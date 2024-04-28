@@ -7,6 +7,8 @@ from openai import OpenAI
 from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 import sys, traceback
 
+__version__ = "v0.0.1"
+
 class Style:
     GREY = '\033[90m'
     RED = '\033[31m'
@@ -45,8 +47,6 @@ Please replace 'your_openai_api_key_here' with the actual API key you obtained f
 
 def print_version():
     print(__version__)
-
-__version__ = "v0.0.1"
 
 def requestFromAI(question, client):
     architecture = platform.machine()
