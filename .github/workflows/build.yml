@@ -66,6 +66,13 @@ jobs:
       - name: List files in dist
         run: ls -alh dist/
 
+      - name: Update install.sh with latest version tag
+        run: |
+          sed -i "s/ABEG_VERSION=\".*\"/ABEG_VERSION=\"${GITHUB_REF#refs/tags/}\"/" install.sh
+
+      - name: Copy install.sh to dist
+        run: cp install.sh dist/install.sh
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         # env:
@@ -76,9 +83,6 @@ jobs:
           files: |
             dist/*/*
           token: ${{ secrets.RELEASE_TOKEN }}
-      - name: Update install.sh with latest version tag
-        run: |
-          sed -i "s/ABEG_VERSION=\".*\"/ABEG_VERSION=\"${GITHUB_REF#refs/tags/}\"/" install.sh
 
   cleanup:
     needs: [build, release]
