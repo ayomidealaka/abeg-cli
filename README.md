@@ -4,6 +4,8 @@ abeg-cli is a Command Line Interface (CLI) companion designed to streamline your
 
 This currently uses OpenAI's gpt-4-0125-preview model.
 
+<p align="center"><img src="/gif/demo.gif?raw=true"/></p>
+
 ## How it Works
 
 Simply tell abeg-cli what you need in plain English, and it will provide you with the exact command to execute. Whether you need to stop all services running on a particular port, set up a local server, or manage containerized applications, abeg-cli is your go-to assistant for fast and reliable command generation.

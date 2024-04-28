@@ -18,27 +18,37 @@ class Style:
     YELLOW = "\033[1;33m"
     GREEN = "\033[0;32m"
 
-api_key = os.getenv('OPENAI_API_KEY')
-__version__ = "v0.0.1"
-
-if api_key is None:
-    print(f"{Style.RED}Error:{Style.RESET} OpenAI API key not found. Please set the OPENAI_API_KEY environment variable using 'export OPENAI_API_KEY=your_openai_api_key'")
-    sys.exit(1)
-
-client = OpenAI(
-    api_key=api_key
-)
-
 def print_custom_help():
     custom_help_text = f"""
- Usage: {Style.BOLD}abeg{Style.RESET} [command you need help with]
+{Style.BOLD}Usage of abeg:{Style.RESET}
+  {Style.BOLD}abeg{Style.RESET} [command you need help with]
+  Type a command after '{Style.BOLD}abeg{Style.RESET}' to get specific CLI commands generated for various tasks.
+
+Examples:
+  $ {Style.BOLD}abeg{Style.RESET} stop all services on port 3000
+  $ {Style.BOLD}abeg{Style.RESET} setup a new Django project
+
+{Style.BOLD}Setting Up the OpenAI API Key:{Style.RESET}
+  Before using 'abeg', you must set your OpenAI API key as an environment variable.
+  
+  1. Obtain your API key from OpenAI by visiting:
+     {Style.BOLD}https://platform.openai.com/account/api-keys{Style.RESET}
+
+  2. Set your API key in your terminal:
+     {Style.BOLD}$ export OPENAI_API_KEY='your_openai_api_key_here'{Style.RESET}
+  
+  3. You can add the export line to your shell's profile script (.bashrc, .zshrc, etc.) to make it permanent.
+
+Please replace 'your_openai_api_key_here' with the actual API key you obtained from OpenAI.
 """
     print(custom_help_text)
 
 def print_version():
     print(__version__)
 
-def requestFromAI(question):
+__version__ = "v0.0.1"
+
+def requestFromAI(question, client):
     architecture = platform.machine()
     os_name = os.name
     sysinfo = f"Architecture: {architecture}, OS: {os_name}"
@@ -91,11 +101,23 @@ def requestFromAI(question):
 def main():
     if "-h" in sys.argv or "--help" in sys.argv:
         print_custom_help()
+        sys.exit(0) 
     elif "-v" in sys.argv or "--version" in sys.argv:
         print_version()
-    else:
-        command_description = ' '.join(sys.argv[1:])
-        requestFromAI(command_description)
+        sys.exit(0) 
+
+    api_key = os.getenv('OPENAI_API_KEY')
+    
+    if api_key is None:
+        print(f"{Style.RED}Error:{Style.RESET} OpenAI API key not found. Please set the OPENAI_API_KEY environment variable using 'export OPENAI_API_KEY=your_openai_api_key'")
+        sys.exit(1)
+    
+    client = OpenAI(
+        api_key=api_key
+    )
+    
+    command_description = ' '.join(sys.argv[1:])
+    requestFromAI(command_description, client)
         
 if __name__ == "__main__":
     main()
