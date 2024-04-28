@@ -28,7 +28,7 @@ $ lsof -i :3000 | awk 'NR!=1 {print $2}' | xargs kill
 
 Run the returned command in your terminal, and your task is done!
 
-### Installation
+## Installation
 
 You can install the RetroDeep CLI directly using curl with the following command:
 
