@@ -1,0 +1,93 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: amd64
+            python-version: 3.9
+            binary-name: abeg-linux-amd64
+          - os: ubuntu-latest
+            arch: arm64
+            python-version: 3.9
+            binary-name: abeg-linux-arm64
+          - os: macos-latest
+            arch: x64
+            python-version: 3.9
+            binary-name: abeg-macos-x64
+          - os: macos-latest
+            arch: arm64
+            python-version: 3.9
+            binary-name: abeg-macos-arm64
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install PyInstaller
+
+      - name: Build binary with PyInstaller
+        run: |
+          pyinstaller --onefile --name ${{ matrix.binary-name }} abeg.py
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.binary-name }}
+          path: dist/${{ matrix.binary-name }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          path: dist/
+
+      - name: List files in dist
+        run: ls -alh dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        # env:
+        #   RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          # body: |
+          #   Full Changelog: https://github.com/${{ github.repository }}/compare/${{ github.event.release.target_commitish }}...${GITHUB_REF#refs/tags/}
+          files: |
+            dist/*/*
+          token: ${{ secrets.RELEASE_TOKEN }}
+      - name: Update install.sh with latest version tag
+        run: |
+          sed -i "s/ABEG_VERSION=\".*\"/ABEG_VERSION=\"${GITHUB_REF#refs/tags/}\"/" install.sh
+
+  cleanup:
+    needs: [build, release]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Clean up build artifacts
+        run: rm -rf dist
+        shell: bash
+
+      - name: Final clean up
+        run: echo "Cleanup completed successfully."
