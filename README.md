@@ -26,6 +26,14 @@ $ lsof -i :3000 | awk 'NR!=1 {print $2}' | xargs kill
 
 Run the returned command in your terminal, and your task is done!
 
+### Installation
+
+You can install the RetroDeep CLI directly using curl with the following command:
+
+```bash
+curl -fsSL https://github.com/ayomidealaka/abeg-cli/releases/download/v0.0.1/install.sh | bash
+```
+
 ## Configuration
 
 Before using the CLI tool, you need to set up your OpenAI API key as an environment variable. This ensures secure authentication with the OpenAI service.
