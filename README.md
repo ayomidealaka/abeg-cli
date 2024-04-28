@@ -10,7 +10,7 @@ This currently uses OpenAI's gpt-4-0125-preview model.
 
 Simply tell abeg-cli what you need in plain English, and it will provide you with the exact command to execute. Whether you need to stop all services running on a particular port, set up a local server, or manage containerized applications, abeg-cli is your go-to assistant for fast and reliable command generation.
 
-## Example Usage
+### Example Usage
 
 Imagine you need to stop all running services on port 3000. Instead of scouring the web for solutions, simply type:
 
