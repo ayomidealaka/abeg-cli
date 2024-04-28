@@ -63,15 +63,15 @@ jobs:
         with:
           path: dist/
 
-      - name: List files in dist
-        run: ls -alh dist/
-
       - name: Update install.sh with latest version tag
         run: |
           sed -i "s/ABEG_VERSION=\".*\"/ABEG_VERSION=\"${GITHUB_REF#refs/tags/}\"/" install.sh
 
       - name: Copy install.sh to dist
         run: cp install.sh dist/install.sh
+
+      - name: List files in dist
+        run: ls -alh dist/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -81,6 +81,7 @@ jobs:
           # body: |
           #   Full Changelog: https://github.com/${{ github.repository }}/compare/${{ github.event.release.target_commitish }}...${GITHUB_REF#refs/tags/}
           files: |
+            dist/*
             dist/*/*
           token: ${{ secrets.RELEASE_TOKEN }}
 
