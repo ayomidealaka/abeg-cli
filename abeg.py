@@ -22,7 +22,7 @@ api_key = os.getenv('OPENAI_API_KEY')
 
 if api_key is None:
     print(f"{Style.RED}Error:{Style.RESET} OpenAI API key not found. Please set the OPENAI_API_KEY environment variable using 'export OPENAI_API_KEY=your_openai_api_key'")
-    exit(1)
+    sys.exit(1)
 
 client = OpenAI(
     api_key=api_key
