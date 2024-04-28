@@ -4,6 +4,8 @@ import sys
 import platform
 import os
 from openai import OpenAI
+from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
+import sys, traceback
 
 class Style:
     GREY = '\033[90m'
@@ -19,7 +21,7 @@ class Style:
 api_key = os.getenv('OPENAI_API_KEY')
 
 if api_key is None:
-    print(f"{Style.RED}Error:{Style.RESET} OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
+    print(f"{Style.RED}Error:{Style.RESET} OpenAI API key not found. Please set the OPENAI_API_KEY environment variable using 'export OPENAI_API_KEY=your_openai_api_key'")
     exit(1)
 
 client = OpenAI(
@@ -28,7 +30,7 @@ client = OpenAI(
 
 def print_custom_help():
     custom_help_text = f"""
- Usage: {Style.BOLD}abeg{Style.RESET} [command]
+ Usage: {Style.BOLD}abeg{Style.RESET} [command you need help with]
 """
     print(custom_help_text)
 
@@ -70,9 +72,16 @@ def requestFromAI(question):
         print(formatted_output)
 
         return response.choices[0].message.content
+    except ConnectionError:
+        print(f"{Style.RED}Error:{Style.RESET} Failed to get help due to network issues. Please check your internet connection.")
+    except SystemExit as e:
+        sys.exit(e)
     except Exception as e:
         print(f"An error occurred: {e}")
-        return None
+        # traceback.print_exc() 
+        sys.exit(1)
+    except:
+        raise SystemExit()
 
 
 def main():
