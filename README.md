@@ -15,7 +15,7 @@ Simply tell abeg-cli what you need in plain English, and it will provide you wit
 Imagine you need to stop all running services on port 3000. Instead of scouring the web for solutions, simply type:
 
 ```bash
-abeg command to stop all running services on port 3000
+abeg stop all running services on port 3000
 ```
 
 'abeg-cli' will immediately respond with a command like:
